@@ -15,9 +15,8 @@ app.use(morgan('tiny', {
 	stream: fs.createWriteStream(path.join(__dirname,'./access.log'), {flags: 'a'})
 }));
 
-
 app.get('/', (req, res) => {
-  Response(res, { status: 200, message: 'Welcome to covid19 estimator API' });
+  res.status(200).json({ status: 200, message: 'Welcome to covid19 estimator API' });
 });
 const PORT = 7000
 const server = `http://localhost:${PORT}`;

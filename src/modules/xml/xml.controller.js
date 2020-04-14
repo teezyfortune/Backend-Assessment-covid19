@@ -2,7 +2,7 @@ const chhalllenges  = require('../../services/xml.services');
 const { SERVER_ERROR} = require('../../utils/constant')
 const js2xmlParser = require('js2xmlparser');
 
-const covid19ImpactxmlEstimator =  (req, res) => {
+const covid19ImpactxmlEstimator =  (req, res, next) => {
 	try {
 		const allChallenges =  ({ data, impact, severeImpact } ) => {
 			// chhalllenge one
@@ -35,7 +35,7 @@ const covid19ImpactxmlEstimator =  (req, res) => {
 
 		const responsTpe = allChallenges(data)
 		const xmlResponse = js2xmlParser.parse('response',responsTpe)
-
+		next();
 		return res.send(xmlResponse);
 
 	} catch (error) {

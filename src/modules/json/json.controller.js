@@ -1,7 +1,7 @@
 const { SERVER_ERROR} = require('../../utils/constant')
 const chhalllenges = require('../../services/json.services');
 
-const covid19ImpactEstimator =  (req, res) => {
+const covid19ImpactEstimator =  (req, res, next) => {
 	try {
 		const allChallenges =  ({ data, impact, severeImpact } ) => {
 			// chhalllenge one
@@ -30,9 +30,10 @@ const covid19ImpactEstimator =  (req, res) => {
 		},
 		impact: {},
 		severeImpact: {}
-	}
+		}
+		next();
 	return res.status(201).json(allChallenges(input))
-
+	
 } catch (error) {
 	return res.json({ status: 500, messga: SERVER_ERROR })
 
