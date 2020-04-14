@@ -4,7 +4,10 @@
   "description": "Backend for covid19-assesment",
   "main": "app.js",
   "scripts": {
-    "start": "node src/app.js",
+    "clean": "shx rm -rf src/build/ && shx mkdir src/build/",
+    "build": "npm run clean && babel src -d src/build/ --ignore src/build",
+    "start": "node src/build/app.js",
+    "heroku-postbuild": "npm run build",
     "test": "jest",
     "dev": "nodemon  --exec babel-node src/app.js"
   },
@@ -39,6 +42,8 @@
     "eslint-plugin-prettier": "^3.1.2",
     "nodemon": "^2.0.3",
     "prettier": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "shx": "^0.3.2",
     "xml": "^1.0.1"
   }
 }

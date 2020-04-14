@@ -1,16 +1,11 @@
-
 // challenge one
-exports.currentInFectedEstimator =  ({ data, impact, severeImpact }) => {
-	try {
-		impact.currentlyInfected = data.reportedCases * 10;
-		severeImpact.currentlyInfected =  data.reportedCases * 50;
-		return { impact, severeImpact };
-	} catch (error) {
-	return error
-	}
-}
+exports.currentInFectedEstimator = ({ data, impact, severeImpact }) => {
+  impact.currentlyInfected = data.reportedCases * 10;
+  severeImpact.currentlyInfected = data.reportedCases * 50;
 
-const calEstimatedTime =  (periodType, timeValue) => {
+  return { impact, severeImpact };
+};
+const calEstimatedTime = (periodType, timeValue) => {
   switch (periodType) {
     case 'months':
       return timeValue * 30;
@@ -22,55 +17,44 @@ const calEstimatedTime =  (periodType, timeValue) => {
   return timeValue;
 };
 
-exports.currentlyInfectedByRequestedTime =  ({ data, impact, severeImpact }) => {
-	try {
-		impact.infectionsByRequestedTime =  (impact.currentlyInfected
-			* (2 ** Math.trunc(calEstimatedTime(data.periodType, data.timeToElapse / 3))));
-		severeImpact.infectionsByRequestedTime =  (severeImpact.currentlyInfected
-			* (2 ** Math.trunc(calEstimatedTime(data.periodType, data.timeToElapse / 3))));
-		return { impact, severeImpact };
-	} catch (error) {
-		return error
-	}
-}
-exports.serioulsyInfectedCases = ({ impact, severeImpact }) => {
-	try {
-		impact.severeCasesByRequestedTime =  Math.trunc(0.15 * impact.infectionsByRequestedTime);
-		severeImpact.severeCasesByRequestedTime =  Math.trunc(0.15
-			* severeImpact.infectionsByRequestedTime);
-		return { impact, severeImpact };
-	
-	} catch (eror) {
-		return eror;
-}
-}
+exports.currentlyInfectedByRequestedTime = ({ data, impact, severeImpact }) => {
+  impact.infectionsByRequestedTime = (impact.currentlyInfected
+    * (2 ** Math.trunc(calEstimatedTime(data.periodType, data.timeToElapse / 3))));
+  severeImpact.infectionsByRequestedTime = (severeImpact.currentlyInfected
+    * (2 ** Math.trunc(calEstimatedTime(data.periodType, data.timeToElapse / 3))));
+  return { impact, severeImpact };
+};
 
+exports.serioulsyInfectedCases = ({ impact, severeImpact }) => {
+  impact.severeCasesByRequestedTime = Math.trunc(0.15 * impact.infectionsByRequestedTime);
+  severeImpact.severeCasesByRequestedTime = Math.trunc(0.15
+    * severeImpact.infectionsByRequestedTime);
+
+  return { impact, severeImpact };
+};
 
 
 // challenge two
 exports.getAvailablebedByDuaration = ({ data, impact, severeImpact }) => {
-	try {
-		// hospitalBedsByRequestedTime
-		impact.hospitalBedsByRequestedTime =  Math.trunc((0.35 * data.totalHospitalBeds)
-			- impact.severeCasesByRequestedTime);
-		severeImpact.hospitalBedsByRequestedTime = Math.trunc((0.35 * data.totalHospitalBeds)
-			- severeImpact.severeCasesByRequestedTime);
-		return { impact, severeImpact };
-	} catch (error) {
-		return error;
-	}
-}
+  // hospitalBedsByRequestedTime
+  impact.hospitalBedsByRequestedTime = Math.trunc((0.35 * data.totalHospitalBeds)
+    - impact.severeCasesByRequestedTime);
+  severeImpact.hospitalBedsByRequestedTime = Math.trunc((0.35 * data.totalHospitalBeds)
+    - severeImpact.severeCasesByRequestedTime);
+  return { impact, severeImpact };
+};
+
+
 // challeng three begin here
 // casesForVentilatorsByRequestedTime
-exports.findICUImpact =  ({ impact, severeImpact }) => {
+exports.findICUImpact = ({ impact, severeImpact }) => {
   impact.casesForICUByRequestedTime = Math.trunc(0.05 * impact.infectionsByRequestedTime);
-  severeImpact.casesForICUByRequestedTime =  Math.trunc(0.05
+  severeImpact.casesForICUByRequestedTime = Math.trunc(0.05
     * severeImpact.infectionsByRequestedTime);
   return { impact, severeImpact };
 };
 
 exports.caseForVentilation = ({ impact, severeImpact }) => {
-
   impact.casesForVentilatorsByRequestedTime = Math.trunc(0.02 * impact.infectionsByRequestedTime);
   severeImpact.casesForVentilatorsByRequestedTime = Math.trunc(0.02
     * severeImpact.infectionsByRequestedTime);
@@ -79,7 +63,7 @@ exports.caseForVentilation = ({ impact, severeImpact }) => {
 
 
 //  dollarsInFlight
-exports.dollarsInflightImpact =  ({ data, impact, severeImpact }) => {
+exports.dollarsInflightImpact = ({ data, impact, severeImpact }) => {
   impact.dollarsInFlight = Math.trunc(Math.trunc(impact.infectionsByRequestedTime
     * data.region.avgDailyIncomePopulation * data.region.avgDailyIncomeInUSD) / (Math.trunc(
     calEstimatedTime(data.periodType, data.timeToElapse)
@@ -91,4 +75,3 @@ exports.dollarsInflightImpact =  ({ data, impact, severeImpact }) => {
   )));
   return { impact, severeImpact };
 };
-
